@@ -147,7 +147,6 @@ Los niveles de gravedad incluyen texto e iconos además del color, evitando depe
 
 - **Tecnología utilizada:** HTML5, CSS3 y JavaScript Vanilla.
 - **Tipo de producto:** Dashboard web interactivo y responsive.
-- **Enlace al prototipo:** _[Pegar aquí el enlace de GitHub Pages cuando se publique]_
 - **Captura principal:** `assets/dashboard-emergencias.png`.
 - **Instrucciones para visualizarlo:** descargar o clonar el repositorio y abrir el archivo `index.html` en un navegador web.
 
