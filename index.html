@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Dashboard académico para monitorear pacientes y recursos de la sala de emergencias de la Clínica San José." />
+  <title>Dashboard de Emergencias | Clínica San José</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">✚</div>
+      <div>
+        <p class="eyebrow">Clínica San José</p>
+        <h1>Centro de Control de Emergencias</h1>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <div class="live-status" role="status" aria-label="Sistema conectado">
+        <span class="status-dot" aria-hidden="true"></span>
+        Sistema en línea
+      </div>
+      <div class="clock-box">
+        <span>Última actualización</span>
+        <strong id="lastUpdate">15/07/2026 · 03:45</strong>
+      </div>
+      <button class="icon-button" id="refreshButton" type="button" aria-label="Actualizar información" title="Actualizar información">↻</button>
+    </div>
+  </header>
+
+  <main id="contenido-principal" class="dashboard-shell">
+    <section class="welcome-row" aria-labelledby="overview-title">
+      <div>
+        <p class="eyebrow">Vista del director médico</p>
+        <h2 id="overview-title">Situación general de la sala</h2>
+        <p>Prioridades clínicas, alertas y recursos disponibles en una sola pantalla.</p>
+      </div>
+      <div class="shift-card">
+        <span>Médico responsable</span>
+        <strong>Dr. Alejandro Silva</strong>
+        <small>Turno nocturno</small>
+      </div>
+    </section>
+
+    <section class="kpi-grid" aria-label="Indicadores principales">
+      <article class="kpi-card">
+        <div class="kpi-icon neutral" aria-hidden="true">👥</div>
+        <div>
+          <span>Total de pacientes</span>
+          <strong>12</strong>
+          <small>Capacidad bajo presión</small>
+        </div>
+      </article>
+      <article class="kpi-card critical-card">
+        <div class="kpi-icon critical" aria-hidden="true">!</div>
+        <div>
+          <span>Pacientes críticos</span>
+          <strong>3</strong>
+          <small>Requieren atención inmediata</small>
+        </div>
+      </article>
+      <article class="kpi-card warning-card">
+        <div class="kpi-icon warning" aria-hidden="true">♥</div>
+        <div>
+          <span>Alertas vitales</span>
+          <strong>7</strong>
+          <small>Presión o temperatura fuera de rango</small>
+        </div>
+      </article>
+      <article class="kpi-card success-card">
+        <div class="kpi-icon success" aria-hidden="true">✓</div>
+        <div>
+          <span>Posibles altas</span>
+          <strong>3</strong>
+          <small>Podrían liberar observación</small>
+        </div>
+      </article>
+    </section>
+
+    <section class="layout-grid">
+      <div class="main-column">
+        <section class="panel" aria-labelledby="patients-title">
+          <div class="panel-header patient-header">
+            <div>
+              <p class="eyebrow">Monitoreo clínico</p>
+              <h2 id="patients-title">Pacientes en emergencias</h2>
+            </div>
+            <div class="filters" aria-label="Filtros de pacientes">
+              <label class="search-field">
+                <span class="sr-only">Buscar paciente</span>
+                <span aria-hidden="true">⌕</span>
+                <input id="searchInput" type="search" placeholder="Buscar nombre o código" autocomplete="off" />
+              </label>
+              <label>
+                <span class="sr-only">Filtrar por gravedad</span>
+                <select id="statusFilter">
+                  <option value="todos">Todos los estados</option>
+                  <option value="critico">Crítico</option>
+                  <option value="grave">Grave</option>
+                  <option value="moderado">Moderado</option>
+                  <option value="leve">Leve</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="legend" aria-label="Leyenda de gravedad">
+            <span><i class="legend-dot critical-dot"></i> Crítico</span>
+            <span><i class="legend-dot grave-dot"></i> Grave</span>
+            <span><i class="legend-dot moderate-dot"></i> Moderado</span>
+            <span><i class="legend-dot mild-dot"></i> Leve</span>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <caption class="sr-only">Listado de pacientes ordenado por nivel de gravedad</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Paciente</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Signos vitales</th>
+                  <th scope="col">Ingreso</th>
+                  <th scope="col">Situación actual</th>
+                  <th scope="col">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="patientTableBody"></tbody>
+            </table>
+            <div id="emptyState" class="empty-state" hidden>
+              <span aria-hidden="true">⌕</span>
+              <strong>No se encontraron pacientes</strong>
+              <p>Prueba con otro nombre, código o nivel de gravedad.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="side-column" aria-label="Resumen operativo">
+        <section class="panel urgent-panel" aria-labelledby="urgent-title">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow danger-text">Prioridad máxima</p>
+              <h2 id="urgent-title">Atención inmediata</h2>
+            </div>
+            <span class="count-badge">3</span>
+          </div>
+          <div class="urgent-list">
+            <button class="urgent-item" type="button" data-patient-id="PAC007">
+              <span class="priority-number">1</span>
+              <span>
+                <strong>Sofía Mejía</strong>
+                <small>Shock séptico · PA 70/40</small>
+              </span>
+              <span class="arrow" aria-hidden="true">›</span>
+            </button>
+            <button class="urgent-item" type="button" data-patient-id="PAC003">
+              <span class="priority-number">2</span>
+              <span>
+                <strong>Carlos Gómez</strong>
+                <small>Trauma craneal · Requiere UCI</small>
+              </span>
+              <span class="arrow" aria-hidden="true">›</span>
+            </button>
+            <button class="urgent-item" type="button" data-patient-id="PAC012">
+              <span class="priority-number">3</span>
+              <span>
+                <strong>Diana Loor</strong>
+                <small>Intoxicación · Conciencia alterada</small>
+              </span>
+              <span class="arrow" aria-hidden="true">›</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="resources-title">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Capacidad operativa</p>
+              <h2 id="resources-title">Recursos hospitalarios</h2>
+            </div>
+          </div>
+          <div class="resource-list">
+            <div class="resource-item">
+              <div class="resource-topline">
+                <span>Camas de observación</span>
+                <strong class="danger-text">0 / 10 libres</strong>
+              </div>
+              <div class="progress" role="progressbar" aria-label="Ocupación de camas de observación" aria-valuemin="0" aria-valuemax="10" aria-valuenow="10">
+                <span style="width: 100%"></span>
+              </div>
+              <small>Ocupación total</small>
+            </div>
+            <div class="resource-item">
+              <div class="resource-topline">
+                <span>Camas de críticos</span>
+                <strong class="danger-text">0 / 3 libres</strong>
+              </div>
+              <div class="progress" role="progressbar" aria-label="Ocupación de camas críticas" aria-valuemin="0" aria-valuemax="3" aria-valuenow="3">
+                <span style="width: 100%"></span>
+              </div>
+              <small>Ocupación total</small>
+            </div>
+            <div class="resource-item">
+              <div class="resource-topline">
+                <span>Camas UCI general</span>
+                <strong class="warning-text">1 / 8 libre</strong>
+              </div>
+              <div class="progress warning-progress" role="progressbar" aria-label="Ocupación de camas UCI" aria-valuemin="0" aria-valuemax="8" aria-valuenow="7">
+                <span style="width: 87.5%"></span>
+              </div>
+              <small>Una cama disponible</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="doctors-title">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Personal de guardia</p>
+              <h2 id="doctors-title">Disponibilidad médica</h2>
+            </div>
+          </div>
+          <div class="doctor-list">
+            <div class="doctor-item">
+              <div class="avatar">CM</div>
+              <div><strong>Dr. Cevallos</strong><small>Atendiendo paciente</small></div>
+              <span class="availability busy">Ocupado</span>
+            </div>
+            <div class="doctor-item">
+              <div class="avatar">OR</div>
+              <div><strong>Dra. Ortiz</strong><small>Área de críticos</small></div>
+              <span class="availability busy">Ocupada</span>
+            </div>
+            <div class="doctor-item">
+              <div class="avatar">MA</div>
+              <div><strong>Dr. Macías</strong><small>Disponible para asignación</small></div>
+              <span class="availability free">Disponible</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel severity-panel" aria-labelledby="severity-title">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Distribución actual</p>
+              <h2 id="severity-title">Pacientes por gravedad</h2>
+            </div>
+          </div>
+          <div class="severity-chart" aria-label="Tres pacientes por cada nivel de gravedad">
+            <div><span>Crítico</span><div class="bar"><i class="critical-bar" style="width: 100%"></i></div><strong>3</strong></div>
+            <div><span>Grave</span><div class="bar"><i class="grave-bar" style="width: 100%"></i></div><strong>3</strong></div>
+            <div><span>Moderado</span><div class="bar"><i class="moderate-bar" style="width: 100%"></i></div><strong>3</strong></div>
+            <div><span>Leve</span><div class="bar"><i class="mild-bar" style="width: 100%"></i></div><strong>3</strong></div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <dialog id="patientDialog" class="patient-dialog" aria-labelledby="dialogTitle">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="Cerrar detalle">×</button>
+      <div id="dialogContent"></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
