@@ -2,7 +2,7 @@
 
 ![Dashboard de Emergencias](assets/dashboard-emergencias.png)
 
-## 📌 Descripción del proyecto
+##  Descripción del proyecto
 
 Este proyecto presenta el rediseño digital del reporte de emergencias de la **Clínica San José**. El sistema anterior mostraba toda la información en un bloque de texto plano, lo que dificultaba identificar pacientes críticos, alertas clínicas y disponibilidad de recursos.
 
