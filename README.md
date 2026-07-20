@@ -143,7 +143,7 @@ Los niveles de gravedad incluyen texto e iconos además del color, evitando depe
 
 ---
 
-## 🛠️ Paso 4: Evidencia del diseño digital
+##  Paso 4: Evidencia del diseño digital
 
 - **Tecnología utilizada:** HTML5, CSS3 y JavaScript Vanilla.
 - **Tipo de producto:** Dashboard web interactivo y responsive.
